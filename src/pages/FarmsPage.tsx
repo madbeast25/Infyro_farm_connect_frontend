@@ -1,14 +1,28 @@
-import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getOwnedFarms } from '../api/farmApi';
+import type { Farm } from '../types/api';
 
-const mockFarms = [
-  { id: 1, farmName: 'North Field' },
-  { id: 2, farmName: 'Green Valley' },
-  { id: 3, farmName: 'River Plot' },
+const fallbackFarms: Farm[] = [
+  { id: 1, farmName: 'North Field', createdAt: '2024-01-10', updatedAt: '2024-01-10' },
+  { id: 2, farmName: 'Green Valley', createdAt: '2024-02-05', updatedAt: '2024-02-05' },
+  { id: 3, farmName: 'River Plot', createdAt: '2024-03-12', updatedAt: '2024-03-12' },
 ];
 
 export function FarmsPage() {
-  const items = useMemo(() => mockFarms, []);
+  const [farms, setFarms] = useState<Farm[]>(fallbackFarms);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const response = await getOwnedFarms();
+        setFarms(response.length ? response : fallbackFarms);
+      } catch {
+        setFarms(fallbackFarms);
+      }
+    };
+
+    load();
+  }, []);
 
   return (
     <div style={{ display: 'grid', gap: 22 }}>
@@ -33,10 +47,10 @@ export function FarmsPage() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
-        {items.map((farm) => (
-          <Link
+        {farms.map((farm) => (
+          <a
             key={farm.id}
-            to={`/farms/${farm.id}`}
+            href={`/farms/${farm.id}`}
             className="card"
             style={{
               padding: 22,
@@ -56,7 +70,7 @@ export function FarmsPage() {
               <span style={{ color: '#1f7a46', fontWeight: 700 }}>Open farm</span>
               <span style={{ fontSize: 13, color: '#627266' }}>Updated today</span>
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </div>

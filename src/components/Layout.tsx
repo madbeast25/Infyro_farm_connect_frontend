@@ -1,9 +1,10 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Tractor, LogOut, Sprout } from 'lucide-react';
+import { LayoutDashboard, Tractor, LogOut, Sprout, BarChart3, FolderKanban } from 'lucide-react';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/farms', label: 'Farms', icon: Tractor },
+  { to: '/reports', label: 'Reports', icon: BarChart3 },
 ];
 
 export function Layout() {
@@ -66,6 +67,43 @@ export function Layout() {
             </NavLink>
           ))}
         </nav>
+
+        <div style={{ marginTop: 24, padding: '8px 4px', color: '#d9eadb', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
+          Pages
+        </div>
+
+        <div style={{ display: 'grid', gap: 8 }}>
+          <Link
+            to="/farms/1/fields"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              padding: '12px 14px',
+              borderRadius: 12,
+              color: '#fff',
+              opacity: 0.9,
+            }}
+          >
+            <FolderKanban size={18} />
+            Fields
+          </Link>
+          <Link
+            to="/farms/1/plantings"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              padding: '12px 14px',
+              borderRadius: 12,
+              color: '#fff',
+              opacity: 0.9,
+            }}
+          >
+            <Tractor size={18} />
+            Plantings
+          </Link>
+        </div>
 
         <button
           onClick={handleLogout}

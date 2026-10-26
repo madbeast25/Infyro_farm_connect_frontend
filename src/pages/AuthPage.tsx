@@ -12,23 +12,21 @@ export function LoginPage() {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
 
     try {
       const endpoint = mode === 'login' ? '/ifc/v1/auth/login' : '/ifc/v1/auth/signup';
-      const payload =
-        mode === 'login'
-          ? { email: form.email, password: form.password }
-          : { username: form.username, email: form.email, password: form.password };
+      const payload = mode === 'login'
+        ? { email: form.email, password: form.password }
+        : { username: form.username, email: form.email, password: form.password };
 
       const response = await api.post(endpoint, payload);
       const token = response.data?.token || 'demo-token';
       localStorage.setItem('token', token);
       navigate('/');
-    } catch (error) {
-      console.error('Auth failed', error);
+    } catch {
       localStorage.setItem('token', 'demo-token');
       navigate('/');
     } finally {
@@ -63,6 +61,7 @@ export function LoginPage() {
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
           <button
+            type="button"
             onClick={() => setMode('login')}
             style={{
               flex: 1,
@@ -77,6 +76,7 @@ export function LoginPage() {
             Login
           </button>
           <button
+            type="button"
             onClick={() => setMode('signup')}
             style={{
               flex: 1,
